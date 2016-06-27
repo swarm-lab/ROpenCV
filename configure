@@ -1,8 +1,6 @@
 set -x
 set -e
 
-which cmake
-
 mkdir inst/opencv_build/
 
 mkdir inst/opencv/
