@@ -4,8 +4,8 @@ Title: Install OpenCV Within R
 Version: 0.1.31
 Author: Simon Garnier
 Maintainer: Simon Garnier <garnier@njit.edu>
-Description: This a service package to install OpenCV within R for facilitating
-  its use by other packages.
+Description: This is a utility package that installs OpenCV within R for use by
+  other packages.
 License: GPL-3
 LazyData: TRUE
 Imports:
