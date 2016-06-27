@@ -1,0 +1,15 @@
+Package: ROpenCV
+Type: Package
+Title: Install OpenCV Within R
+Version: 0.1.31
+Author: Simon Garnier
+Maintainer: Simon Garnier <garnier@njit.edu>
+Description: This a service package to install OpenCV within R for facilitating
+  its use by other packages.
+License: GPL-3
+LazyData: TRUE
+Imports:
+    Rcpp (>= 0.12.5)
+LinkingTo: Rcpp
+SystemRequirements: cmake (>= 3.5.2)
+RoxygenNote: 5.0.1

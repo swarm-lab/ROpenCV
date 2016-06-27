@@ -1,0 +1,20 @@
+set -x
+set -e
+
+which cmake
+
+mkdir inst/opencv_build/
+
+mkdir inst/opencv/
+
+cd inst/opencv_build/
+
+cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=../opencv/ -D OPENCV_EXTRA_MODULES_PATH=../../opencv/opencv_contrib/modules/ ../../opencv/opencv/
+
+make -j4
+
+make install
+
+cd ..
+
+rm -rf opencv_build/
