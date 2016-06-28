@@ -1,3 +1,12 @@
+#' @title OpenCV version
+#'
+#' @description Determines the version of OpenCV installed within R.
+#'
+#' @return A character string with the version of OpenCV installed by
+#'  \code{\link{ROpenCV}}.
+#'
+#' @author Simon Garnier, \email{garnier@@njit.edu}
+#'
 #' @export
 opencvVersion <- function() {
   pkgPath <- find.package("ROpenCV")
@@ -7,26 +16,36 @@ opencvVersion <- function() {
 }
 
 
+#' @title C/C++ configuration options
+#'
+#' @description Determines the configuration options for compiling C/C++-based
+#'  packages against OpenCV installed by \code{\link{ROpenCV}}.
+#'
+#' @param output Either 'libs' for library configuration options or 'cflags' for
+#'  C/C++ configuration flags.
+#'
+#' @return A concatenated character string (with \code{\link{cat}}) of the
+#'  configuration options.
+#'
+#' @author Simon Garnier, \email{garnier@@njit.edu}
+#'
 #' @export
 opencvConfig <- function(output = "libs") {
   pkgPath <- find.package("ROpenCV")
-  pcPath <- "/opencv/lib/pkgconfig/opencv.pc"
-  pc <- read.table(paste0(pkgPath, pcPath), sep = "\t")$V1
-
   prefix <- paste0(pkgPath, "/opencv")
-  execPrefix <- prefix
-  libDir <- paste0(execPrefix, "/lib")
-  includedirOld <- paste0(prefix, "/include/opencv")
-  includedirNew <- paste0(prefix, "/include")
 
   if (output == "libs") {
-    cat(paste0("-L", libDir, " -lopencv_stitching -lopencv_superres -lopencv_videostab -lopencv_aruco -lopencv_bgsegm -lopencv_bioinspired -lopencv_ccalib -lopencv_dnn -lopencv_dpm -lopencv_fuzzy -lopencv_line_descriptor -lopencv_optflow -lopencv_plot -lopencv_reg -lopencv_saliency -lopencv_stereo -lopencv_structured_light -lopencv_rgbd -lopencv_surface_matching -lopencv_tracking -lopencv_datasets -lopencv_text -lopencv_face -lopencv_xfeatures2d -lopencv_shape -lopencv_video -lopencv_ximgproc -lopencv_calib3d -lopencv_features2d -lopencv_flann -lopencv_xobjdetect -lopencv_objdetect -lopencv_ml -lopencv_xphoto -lopencv_highgui -lopencv_videoio -lopencv_imgcodecs -lopencv_photo -lopencv_imgproc -lopencv_core"))
+    execPrefix <- prefix
+    libDir <- paste0(execPrefix, "/lib")
+    pcPath <- "/opencv/lib/pkgconfig/opencv.pc"
+    pc <- read.table(paste0(pkgPath, pcPath), sep = "\t")$V1
+    libs <- gsub(".*\\/lib ", "", as.character(pc[grepl("Libs:", pc)]))
+    cat(paste0("-L", libDir, " ", libs))
   } else if (output == "cflags") {
+    includedirOld <- paste0(prefix, "/include/opencv")
+    includedirNew <- paste0(prefix, "/include")
     cat(paste0("-I", includedirOld, " -I", includedirNew))
   } else {
     stop("output should be either 'libs' or 'cflags'")
   }
 }
-
-
-
