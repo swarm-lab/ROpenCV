@@ -1,7 +1,5 @@
 # ROpenCV
 
----
-
 **Not ready for production. Try at your own risks. Mac and Linux only.**
 
 ## Package description
