@@ -12,11 +12,10 @@ Rscript -e 'download.file("https://github.com/Itseez/opencv_contrib/archive/3.1.
 Rscript -e 'untar("opencv_3.1.0.tar.gz")'
 Rscript -e 'untar("opencv_contrib_3.1.0.tar.gz")'
 
-cd opencv-3.1.0
+Rscript -e 'download.file("https://raw.githubusercontent.com/alalek/opencv_contrib/d766663add331bbec49f6dfbd5dee45966bbc34b/modules/hdf/include/opencv2/hdf/hdf5.hpp", "opencv_contrib-3.1.0/modules/hdf/include/opencv2/hdf/hdf5.hpp")'
+Rscript -e 'download.file("https://raw.githubusercontent.com/alalek/opencv_contrib/d766663add331bbec49f6dfbd5dee45966bbc34b/modules/hdf/src/hdf5.cpp", "opencv_contrib-3.1.0/modules/hdf/src/hdf5.cpp")'
 
-echo "" >> modules/python/common.cmake
-echo "find_package(HDF5)" >> modules/python/common.cmake
-echo "include_directories(${HDF5_INCLUDE_DIRS})" >> modules/python/common.cmake
+cd opencv-3.1.0
 
 mkdir build
 cd build
