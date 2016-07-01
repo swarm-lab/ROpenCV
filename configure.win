@@ -19,7 +19,7 @@ cd opencv-3.1.0
 mkdir build
 cd build
 
-cmake -G "Unix Makefiles" -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=../../../opencv/ -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib-3.1.0/modules/ ../
+cmake -G "Unix Makefiles" -DBUILD_opencv_bioinspired=OFF -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=../../../opencv/ -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib-3.1.0/modules/ ../
 make -j4
 make install
 
