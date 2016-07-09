@@ -46,7 +46,7 @@ opencvConfig <- function(output = "libs") {
       execPrefix <- paste0(prefix, "/x86/mingw")
       libDir <- paste0(execPrefix, "/lib")
       libs <- paste0("-l", gsub(".dll.a", "", gsub("lib", "", list.files(libDir, "lib*"))))
-      cat(paste0('-L"', libDir, '"'), libs)
+      cat(paste0('-L"', shortPathName(libDir), '"'), libs)
     } else {
       execPrefix <- prefix
       libDir <- paste0(execPrefix, "/lib")
@@ -60,7 +60,7 @@ opencvConfig <- function(output = "libs") {
     includedirNew <- paste0(prefix, "/include")
 
     if (.Platform$OS.type == "windows") {
-      cat(paste0('-I"', includedirOld, '" -I"', includedirNew, '"'))
+      cat(paste0('-I"', shortPathName(includedirOld), '" -I"', shortPathName(includedirNew), '"'))
     } else {
       cat(paste0("-I", includedirOld, " -I", includedirNew))
     }
