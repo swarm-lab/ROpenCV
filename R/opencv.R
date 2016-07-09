@@ -10,9 +10,16 @@
 #' @export
 opencvVersion <- function() {
   pkgPath <- find.package("ROpenCV")
-  pcPath <- "/opencv/lib/pkgconfig/opencv.pc"
-  pc <- read.table(paste0(pkgPath, pcPath), sep = "\t")$V1
-  as.character(pc[grepl("Version", pc)])
+
+  if (.Platform$OS.type == "windows") {
+    pcPath <- "/opencv/OpenCVConfig-version.cmake"
+    pc <- read.table(paste0(pkgPath, pcPath), sep = "\t")[1, 1]
+    paste0("Version ", gsub(")", "", gsub(".*VERSION ", "", pc)))
+  } else {
+    pcPath <- "/opencv/lib/pkgconfig/opencv.pc"
+    pc <- read.table(paste0(pkgPath, pcPath), sep = "\t")$V1
+    as.character(pc[grepl("Version", pc)])
+  }
 }
 
 
@@ -35,16 +42,28 @@ opencvConfig <- function(output = "libs") {
   prefix <- paste0(pkgPath, "/opencv")
 
   if (output == "libs") {
-    execPrefix <- prefix
-    libDir <- paste0(execPrefix, "/lib")
-    pcPath <- "/opencv/lib/pkgconfig/opencv.pc"
-    pc <- read.table(paste0(pkgPath, pcPath), sep = "\t")$V1
-    libs <- gsub(".*\\/lib ", "", as.character(pc[grepl("Libs:", pc)]))
-    cat(paste0("-L", libDir, " ", libs))
+    if (.Platform$OS.type == "windows") {
+      execPrefix <- paste0(prefix, "/x86/mingw")
+      libDir <- paste0(execPrefix, "/lib")
+      libs <- paste0("-l", gsub(".dll.a", "", gsub("lib", "", list.files(libDir, "lib*"))))
+      cat(paste0('-L"', libDir, '"'), libs)
+    } else {
+      execPrefix <- prefix
+      libDir <- paste0(execPrefix, "/lib")
+      pcPath <- "/opencv/lib/pkgconfig/opencv.pc"
+      pc <- read.table(paste0(pkgPath, pcPath), sep = "\t")$V1
+      libs <- gsub(".*\\/lib ", "", as.character(pc[grepl("Libs:", pc)]))
+      cat(paste0("-L", libDir, " ", libs))
+    }
   } else if (output == "cflags") {
     includedirOld <- paste0(prefix, "/include/opencv")
     includedirNew <- paste0(prefix, "/include")
-    cat(paste0("-I", includedirOld, " -I", includedirNew))
+
+    if (.Platform$OS.type == "windows") {
+      cat(paste0('-I"', includedirOld, '" -I"', includedirNew, '"'))
+    } else {
+      cat(paste0("-I", includedirOld, " -I", includedirNew))
+    }
   } else {
     stop("output should be either 'libs' or 'cflags'")
   }
